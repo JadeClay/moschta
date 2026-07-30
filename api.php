@@ -343,8 +343,59 @@ switch ($action) {
 
         // --- Notify admin ---
         $subject = 'Nueva solicitud de voluntariado - ' . $name;
-        $body = "Nombre: $name\nEmail: $email\nTeléfono: $phone\nÁrea: $area\n\nMensaje:\n$message";
-        $headers = 'From: ' . MAIL_FROM . "\r\n" . 'Reply-To: ' . $email;
+        $headers = 'From: ' . MAIL_FROM . "\r\n"
+                 . 'Reply-To: ' . $email . "\r\n"
+                 . 'Content-Type: text/html; charset=utf-8';
+        $esc = 'htmlspecialchars';
+        $body = '
+<html>
+<body style="margin:0;padding:0;background-color:#f4f4f4;font-family:Arial,Helvetica,sans-serif;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="background-color:#f4f4f4;padding:30px 10px;">
+    <tr>
+      <td align="center">
+        <table width="600" cellpadding="0" cellspacing="0" style="max-width:600px;background:#ffffff;border-radius:8px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.08);">
+          <tr>
+            <td style="background:#1a3a5c;padding:30px 20px;text-align:center;">
+              <h1 style="color:#ffffff;margin:0;font-size:24px;letter-spacing:1px;">MOSCTHA</h1>
+              <p style="color:#8ab4d6;margin:8px 0 0;font-size:14px;">Nueva solicitud de voluntariado</p>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding:30px 25px;">
+              <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
+                <tr>
+                  <td style="padding:10px 8px;border-bottom:1px solid #eee;font-weight:700;color:#555;width:100px;vertical-align:top;">Nombre</td>
+                  <td style="padding:10px 8px;border-bottom:1px solid #eee;color:#333;">' . $esc($name) . '</td>
+                </tr>
+                <tr>
+                  <td style="padding:10px 8px;border-bottom:1px solid #eee;font-weight:700;color:#555;vertical-align:top;">Correo</td>
+                  <td style="padding:10px 8px;border-bottom:1px solid #eee;color:#333;">' . $esc($email) . '</td>
+                </tr>
+                <tr>
+                  <td style="padding:10px 8px;border-bottom:1px solid #eee;font-weight:700;color:#555;vertical-align:top;">Teléfono</td>
+                  <td style="padding:10px 8px;border-bottom:1px solid #eee;color:#333;">' . $esc($phone) . '</td>
+                </tr>
+                <tr>
+                  <td style="padding:10px 8px;border-bottom:1px solid #eee;font-weight:700;color:#555;vertical-align:top;">Área</td>
+                  <td style="padding:10px 8px;border-bottom:1px solid #eee;color:#333;">' . $esc($area) . '</td>
+                </tr>
+              </table>
+              <div style="height:1px;background:#ddd;margin:20px 0;"></div>
+              <h3 style="color:#1a3a5c;margin:0 0 10px;">Mensaje</h3>
+              <p style="color:#333;line-height:1.6;margin:0;">' . nl2br($esc($message)) . '</p>
+            </td>
+          </tr>
+          <tr>
+            <td style="background:#f8f8f8;padding:15px 20px;text-align:center;font-size:12px;color:#999;">
+              Este mensaje fue enviado desde el formulario de voluntariado de MOSCTHA.
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>';
         @mail(ADMIN_EMAIL, $subject, $body, $headers);
 
         jsonSuccess(['message' => 'Solicitud enviada con éxito.'], 201);
