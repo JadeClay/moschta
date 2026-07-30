@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Moschta ONG</title>
+  <title>Únete al cambio - Moschta</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link href="css/style.css" rel="stylesheet">
@@ -11,7 +11,7 @@
 <body>
 
   <!-- NAVBAR -->
-  <nav class="navbar navbar-expand-lg fixed-top">
+  <nav class="navbar navbar-expand-lg fixed-top scrolled">
     <div class="container">
       <a class="navbar-brand" href="index.html">
         <img src="images/logo-moschta.png" alt="Moschta" class="logo-dark">
@@ -62,150 +62,63 @@
     </div>
   </nav>
 
-  <!-- CAROUSEL -->
-  <section class="hero-carousel">
-    <div id="heroCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="5000">
-      <div class="carousel-inner">
-        <div class="carousel-item active" style="background-image: url('images/slide-1.jpg');">
-          <div class="carousel-caption">
-            <h2>Elegance in Every Detail</h2>
-            <p>We craft experiences that leave a lasting impression</p>
-            <a href="about.html" class="btn btn-accent">Discover More</a>
-          </div>
-        </div>
-        <div class="carousel-item" style="background-image: url('images/slide-2.jpg');">
-          <div class="carousel-caption">
-            <h2>Excellence Redefined</h2>
-            <p>Where vision meets precision and quality</p>
-            <a href="services.html" class="btn btn-accent">Our Services</a>
-          </div>
-        </div>
-        <div class="carousel-item" style="background-image: url('images/slide-3.jpg');">
-          <div class="carousel-caption">
-            <h2>Trusted by Leaders</h2>
-            <p>Building partnerships through integrity and results</p>
-            <a href="contact.html" class="btn btn-accent">Get in Touch</a>
-          </div>
-        </div>
-      </div>
-      <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
-        <span class="carousel-control-prev-icon"></span>
-      </button>
-      <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
-        <span class="carousel-control-next-icon"></span>
-      </button>
-      <div class="carousel-indicators">
-        <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="0" class="active"></button>
-        <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="1"></button>
-        <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="2"></button>
-      </div>
+  <!-- PAGE HERO -->
+  <section class="page-hero">
+    <div class="container">
+      <h1>Únete al cambio</h1>
+      <hr class="accent-line">
+      <p>Haz la diferencia en tu comunidad. Completa el formulario y forma parte del voluntariado MOSCTHA.</p>
     </div>
   </section>
 
-  <!-- STATISTICS -->
-  <section class="stats-section">
+  <!-- VOLUNTEER FORM -->
+  <section class="section">
     <div class="container">
-      <div class="row">
-        <div class="col-6 col-lg-3">
-          <div class="stat-item">
-            <div class="stat-number" data-target="150">0</div>
-            <div class="stat-divider"></div>
-            <div class="stat-label">Projects Completed</div>
-          </div>
-        </div>
-        <div class="col-6 col-lg-3">
-          <div class="stat-item">
-            <div class="stat-number" data-target="85">0</div>
-            <div class="stat-divider"></div>
-            <div class="stat-label">Happy Clients</div>
-          </div>
-        </div>
-        <div class="col-6 col-lg-3">
-          <div class="stat-item">
-            <div class="stat-number" data-target="12">0</div>
-            <div class="stat-divider"></div>
-            <div class="stat-label">Years of Experience</div>
-          </div>
-        </div>
-        <div class="col-6 col-lg-3">
-          <div class="stat-item">
-            <div class="stat-number" data-target="24">0</div>
-            <div class="stat-divider"></div>
-            <div class="stat-label">Awards Received</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
+      <div class="row justify-content-center">
+        <div class="col-lg-8">
+          <div id="volMsg" class="alert d-none"></div>
+          <form id="volForm" novalidate>
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label class="form-label">Nombre completo <span class="text-danger">*</span></label>
+                <input type="text" class="form-control" id="volName" required>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Correo electrónico <span class="text-danger">*</span></label>
+                <input type="email" class="form-control" id="volEmail" required>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Teléfono</label>
+                <input type="text" class="form-control" id="volPhone">
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Área de interés</label>
+                <select class="form-select" id="volArea">
+                  <option value="">Seleccionar…</option>
+                  <option value="salud">Salud</option>
+                  <option value="desarrollo">Desarrollo Comunitario</option>
+                  <option value="humanitario">Trabajo Humanitario</option>
+                  <option value="educacion">Educación</option>
+                  <option value="legal">Legal / Incidencia</option>
+                  <option value="sin preferencia">Sin preferencia</option>
+                </select>
+              </div>
+              <div class="col-12">
+                <label class="form-label">¿Por qué quieres ser voluntario? <span class="text-danger">*</span></label>
+                <textarea class="form-control" id="volMessage" rows="5" required></textarea>
+              </div>
+            </div>
 
-  <!-- ALLIES -->
-  <section class="section allies-section">
-    <div class="container">
-      <div class="section-title">
-        <h2>Nuestros Aliados</h2>
-        <hr class="accent-line">
-        <p>Sé parte del cambio. Con tu contribución, ayudas a impulsar nuestro impacto y continuar desarrollando nuestros programas y proyectos.</p>
-      </div>
-      <div class="row align-items-center justify-content-center g-4 allies-grid">
-        <div class="col-6 col-md-4 col-lg-2">
-          <div class="ally-logo">
-            <img src="images/ally-1.svg" alt="Ally Partner 1">
-          </div>
-        </div>
-        <div class="col-6 col-md-4 col-lg-2">
-          <div class="ally-logo">
-            <img src="images/ally-2.svg" alt="Ally Partner 2">
-          </div>
-        </div>
-        <div class="col-6 col-md-4 col-lg-2">
-          <div class="ally-logo">
-            <img src="images/ally-3.svg" alt="Ally Partner 3">
-          </div>
-        </div>
-        <div class="col-6 col-md-4 col-lg-2">
-          <div class="ally-logo">
-            <img src="images/ally-4.svg" alt="Ally Partner 4">
-          </div>
-        </div>
-        <div class="col-6 col-md-4 col-lg-2">
-          <div class="ally-logo">
-            <img src="images/ally-5.svg" alt="Ally Partner 5">
-          </div>
-        </div>
-        <div class="col-6 col-md-4 col-lg-2">
-          <div class="ally-logo">
-            <img src="images/ally-6.svg" alt="Ally Partner 6">
-          </div>
-        </div>
-        <div class="col-6 col-md-4 col-lg-2">
-          <div class="ally-logo">
-            <img src="images/ally-7.svg" alt="Ally Partner 7">
-          </div>
-        </div>
-        <div class="col-6 col-md-4 col-lg-2">
-          <div class="ally-logo">
-            <img src="images/ally-8.svg" alt="Ally Partner 8">
-          </div>
-        </div>
-        <div class="col-6 col-md-4 col-lg-2">
-          <div class="ally-logo">
-            <img src="images/ally-9.svg" alt="Ally Partner 9">
-          </div>
-        </div>
-        <div class="col-6 col-md-4 col-lg-2">
-          <div class="ally-logo">
-            <img src="images/ally-10.svg" alt="Ally Partner 10">
-          </div>
-        </div>
-        <div class="col-6 col-md-4 col-lg-2">
-          <div class="ally-logo">
-            <img src="images/ally-11.svg" alt="Ally Partner 11">
-          </div>
-        </div>
-        <div class="col-6 col-md-4 col-lg-2">
-          <div class="ally-logo">
-            <img src="images/ally-12.svg" alt="Ally Partner 12">
-          </div>
+            <!-- Honeypot: hidden from humans via CSS -->
+            <div class="vol-hp-field">
+              <label for="volWebsite">Website</label>
+              <input type="text" id="volWebsite" name="website" tabindex="-1" autocomplete="off">
+            </div>
+
+            <div class="mt-4">
+              <button type="submit" class="btn btn-accent btn-lg" id="volSubmitBtn">Enviar solicitud</button>
+            </div>
+          </form>
         </div>
       </div>
     </div>
@@ -215,7 +128,6 @@
   <footer class="site-footer">
     <div class="container">
       <div class="row">
-        <!-- Brand & About -->
         <div class="col-lg-4 mb-4">
           <a href="index.html" class="footer-brand">Mosct<span>ha</span></a>
           <p class="footer-text">Somos una organización dominicana, sin fines de lucro, fundada el 25 de enero de 1985. Incorporada por el Poder Ejecutivo bajo el decreto No. 585-03, en fecha 16 de junio de 2003, y actualizada bajo la Ley 122-05 sobre regulación y fomento de las asociaciones sin fines de lucro en República Dominicana.</p>
@@ -234,20 +146,16 @@
             </a>
           </div>
         </div>
-
-        <!-- Quick Links -->
         <div class="col-lg-4 col-md-4 mb-4">
           <h5 class="footer-heading">Enlaces Rápidos</h5>
           <ul class="footer-links">
             <li><a href="index.html">Inicio</a></li>
             <li><a href="about.html">Sobre nosotros</a></li>
-            <li><a href="services.html">Servicios</a></li>
             <li><a href="memorias.html">Memorias Institucionales</a></li>
+            <li><a href="voluntario.html">Voluntariado</a></li>
             <li><a href="contact.html">Contacto</a></li>
           </ul>
         </div>
-
-        <!-- Contact -->
         <div class="col-lg-4 col-md-4 mb-4">
           <h5 class="footer-heading">Contacto</h5>
           <div class="footer-contact-item">
@@ -262,6 +170,7 @@
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
             <span><a href="mailto:mosctha@gmail.com">mosctha@gmail.com</a></span>
           </div>
+        </div>
       </div>
       <div class="footer-bottom">
         <p>Copyright &copy; 2026 Todos los derechos reservados Mosctha RD.</p>
@@ -271,5 +180,70 @@
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script src="js/main.js"></script>
+
+  <script>
+    var volPageLoadTime = performance.now();
+
+    document.getElementById('volForm').addEventListener('submit', async function (e) {
+      e.preventDefault();
+
+      var btn = document.getElementById('volSubmitBtn');
+      var msg = document.getElementById('volMsg');
+      msg.classList.add('d-none');
+
+      var name = document.getElementById('volName').value.trim();
+      var email = document.getElementById('volEmail').value.trim();
+      var phone = document.getElementById('volPhone').value.trim();
+      var area = document.getElementById('volArea').value;
+      var message = document.getElementById('volMessage').value.trim();
+
+      if (!name || !email || !message) {
+        msg.className = 'alert alert-danger';
+        msg.textContent = 'Por favor completa los campos obligatorios.';
+        msg.classList.remove('d-none');
+        return;
+      }
+
+      btn.disabled = true;
+      btn.textContent = 'Enviando…';
+
+      try {
+        var res = await fetch('api.php?action=volunteer', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            name: name,
+            email: email,
+            phone: phone,
+            area: area,
+            message: message,
+            website: document.getElementById('volWebsite').value,
+            pageLoadTime: volPageLoadTime,
+            submitTime: performance.now()
+          })
+        });
+
+        var data = await res.json();
+
+        if (data.success) {
+          msg.className = 'alert alert-success';
+          msg.textContent = '¡Solicitud enviada con éxito! Te contactaremos pronto.';
+          msg.classList.remove('d-none');
+          document.getElementById('volForm').reset();
+        } else {
+          msg.className = 'alert alert-danger';
+          msg.textContent = data.error || 'Ocurrió un error. Intenta de nuevo.';
+          msg.classList.remove('d-none');
+        }
+      } catch (err) {
+        msg.className = 'alert alert-danger';
+        msg.textContent = 'Error de conexión. Intenta de nuevo.';
+        msg.classList.remove('d-none');
+      }
+
+      btn.disabled = false;
+      btn.textContent = 'Enviar solicitud';
+    });
+  </script>
 </body>
 </html>

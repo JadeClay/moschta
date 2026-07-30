@@ -82,24 +82,79 @@ $method = $_SERVER['REQUEST_METHOD'];
 
 switch ($action) {
 
-    // ---- PUBLIC: List all posts ----
-    case 'posts':
-        $db = getDB();
-        $stmt = $db->query('SELECT id, title, date, excerpt, image_url, created_at FROM blog_posts ORDER BY date DESC');
-        $posts = $stmt->fetchAll();
-        jsonSuccess($posts);
-        break;
-
-    // ---- PUBLIC: Get single post ----
-    case 'post':
-        if (!isset($_GET['id'])) jsonError('Missing post ID');
-        $db = getDB();
-        $stmt = $db->prepare('SELECT * FROM blog_posts WHERE id = ?');
-        $stmt->execute([$_GET['id']]);
-        $post = $stmt->fetch();
-        if (!$post) jsonError('Post not found', 404);
-        jsonSuccess($post);
-        break;
+    // [BLOG ENDPOINTS COMMENTED OUT]
+    // case 'posts':
+    //     $db = getDB();
+    //     $stmt = $db->query('SELECT id, title, date, excerpt, image_url, created_at FROM blog_posts ORDER BY date DESC');
+    //     $posts = $stmt->fetchAll();
+    //     jsonSuccess($posts);
+    //     break;
+    //
+    // case 'post':
+    //     if (!isset($_GET['id'])) jsonError('Missing post ID');
+    //     $db = getDB();
+    //     $stmt = $db->prepare('SELECT * FROM blog_posts WHERE id = ?');
+    //     $stmt->execute([$_GET['id']]);
+    //     $post = $stmt->fetch();
+    //     if (!$post) jsonError('Post not found', 404);
+    //     jsonSuccess($post);
+    //     break;
+    //
+    // case 'create':
+    //     if ($method !== 'POST') jsonError('POST required');
+    //     requireAuth();
+    //     $input = json_decode(file_get_contents('php://input'), true);
+    //     $title = trim($input['title'] ?? '');
+    //     $date = $input['date'] ?? '';
+    //     $excerpt = trim($input['excerpt'] ?? '');
+    //     $imageUrl = trim($input['imageUrl'] ?? '');
+    //     $content = $input['content'] ?? '';
+    //     if (!$title || !$date || !$excerpt) {
+    //         jsonError('Title, date, and excerpt are required');
+    //     }
+    //     $db = getDB();
+    //     $stmt = $db->prepare('INSERT INTO blog_posts (title, date, excerpt, image_url, content) VALUES (?, ?, ?, ?, ?)');
+    //     $stmt->execute([$title, $date, $excerpt, $imageUrl, $content]);
+    //     jsonSuccess(['id' => $db->lastInsertId(), 'message' => 'Post created'], 201);
+    //     break;
+    //
+    // case 'update':
+    //     if ($method !== 'POST') jsonError('POST required');
+    //     requireAuth();
+    //     $input = json_decode(file_get_contents('php://input'), true);
+    //     $id = $input['id'] ?? '';
+    //     $title = trim($input['title'] ?? '');
+    //     $date = $input['date'] ?? '';
+    //     $excerpt = trim($input['excerpt'] ?? '');
+    //     $imageUrl = trim($input['imageUrl'] ?? '');
+    //     $content = $input['content'] ?? '';
+    //     if (!$id || !$title || !$date || !$excerpt) {
+    //         jsonError('ID, title, date, and excerpt are required');
+    //     }
+    //     $db = getDB();
+    //     $stmt = $db->prepare('UPDATE blog_posts SET title = ?, date = ?, excerpt = ?, image_url = ?, content = ? WHERE id = ?');
+    //     $stmt->execute([$title, $date, $excerpt, $imageUrl, $content, $id]);
+    //     jsonSuccess(['message' => 'Post updated']);
+    //     break;
+    //
+    // case 'delete':
+    //     if ($method !== 'POST') jsonError('POST required');
+    //     requireAuth();
+    //     $input = json_decode(file_get_contents('php://input'), true);
+    //     $id = $input['id'] ?? '';
+    //     if (!$id) jsonError('Missing post ID');
+    //     $db = getDB();
+    //     $stmt = $db->prepare('SELECT image_url FROM blog_posts WHERE id = ?');
+    //     $stmt->execute([$id]);
+    //     $post = $stmt->fetch();
+    //     $stmt = $db->prepare('DELETE FROM blog_posts WHERE id = ?');
+    //     $stmt->execute([$id]);
+    //     if ($post && !empty($post['image_url']) && strpos($post['image_url'], 'uploads/') === 0) {
+    //         $file = __DIR__ . '/' . $post['image_url'];
+    //         if (is_file($file)) unlink($file);
+    //     }
+    //     jsonSuccess(['message' => 'Post deleted']);
+    //     break;
 
     // ---- AUTH: Login ----
     case 'login':
@@ -130,91 +185,168 @@ switch ($action) {
         }
         break;
 
-    // ---- AUTH: Create post ----
-    case 'create':
-        if ($method !== 'POST') jsonError('POST required');
-        requireAuth();
-        $input = json_decode(file_get_contents('php://input'), true);
-        $title = trim($input['title'] ?? '');
-        $date = $input['date'] ?? '';
-        $excerpt = trim($input['excerpt'] ?? '');
-        $imageUrl = trim($input['imageUrl'] ?? '');
-        $content = $input['content'] ?? '';
-        if (!$title || !$date || !$excerpt) {
-            jsonError('Title, date, and excerpt are required');
-        }
+    // [BLOG ENDPOINTS CONTINUED]
+    // case 'create':
+    //     if ($method !== 'POST') jsonError('POST required');
+    //     requireAuth();
+    //     $input = json_decode(file_get_contents('php://input'), true);
+    //     $title = trim($input['title'] ?? '');
+    //     $date = $input['date'] ?? '';
+    //     $excerpt = trim($input['excerpt'] ?? '');
+    //     $imageUrl = trim($input['imageUrl'] ?? '');
+    //     $content = $input['content'] ?? '';
+    //     if (!$title || !$date || !$excerpt) {
+    //         jsonError('Title, date, and excerpt are required');
+    //     }
+    //     $db = getDB();
+    //     $stmt = $db->prepare('INSERT INTO blog_posts (title, date, excerpt, image_url, content) VALUES (?, ?, ?, ?, ?)');
+    //     $stmt->execute([$title, $date, $excerpt, $imageUrl, $content]);
+    //     jsonSuccess(['id' => $db->lastInsertId(), 'message' => 'Post created'], 201);
+    //     break;
+    //
+    // case 'update':
+    //     if ($method !== 'POST') jsonError('POST required');
+    //     requireAuth();
+    //     $input = json_decode(file_get_contents('php://input'), true);
+    //     $id = $input['id'] ?? '';
+    //     $title = trim($input['title'] ?? '');
+    //     $date = $input['date'] ?? '';
+    //     $excerpt = trim($input['excerpt'] ?? '');
+    //     $imageUrl = trim($input['imageUrl'] ?? '');
+    //     $content = $input['content'] ?? '';
+    //     if (!$id || !$title || !$date || !$excerpt) {
+    //         jsonError('ID, title, date, and excerpt are required');
+    //     }
+    //     $db = getDB();
+    //     $stmt = $db->prepare('UPDATE blog_posts SET title = ?, date = ?, excerpt = ?, image_url = ?, content = ? WHERE id = ?');
+    //     $stmt->execute([$title, $date, $excerpt, $imageUrl, $content, $id]);
+    //     jsonSuccess(['message' => 'Post updated']);
+    //     break;
+
+    // ---- MEMORIAS: List all ----
+    case 'memorias':
         $db = getDB();
-        $stmt = $db->prepare('INSERT INTO blog_posts (title, date, excerpt, image_url, content) VALUES (?, ?, ?, ?, ?)');
-        $stmt->execute([$title, $date, $excerpt, $imageUrl, $content]);
-        jsonSuccess(['id' => $db->lastInsertId(), 'message' => 'Post created'], 201);
+        if (!empty($_GET['year'])) {
+            $stmt = $db->prepare('SELECT id, title, year, description, file_path, created_at FROM memorias WHERE year = ? ORDER BY created_at DESC');
+            $stmt->execute([$_GET['year']]);
+        } else {
+            $stmt = $db->query('SELECT id, title, year, description, file_path, created_at FROM memorias ORDER BY year DESC, created_at DESC');
+        }
+        $list = $stmt->fetchAll();
+        jsonSuccess($list);
         break;
 
-    // ---- AUTH: Update post ----
-    case 'update':
-        if ($method !== 'POST') jsonError('POST required');
-        requireAuth();
-        $input = json_decode(file_get_contents('php://input'), true);
-        $id = $input['id'] ?? '';
-        $title = trim($input['title'] ?? '');
-        $date = $input['date'] ?? '';
-        $excerpt = trim($input['excerpt'] ?? '');
-        $imageUrl = trim($input['imageUrl'] ?? '');
-        $content = $input['content'] ?? '';
-        if (!$id || !$title || !$date || !$excerpt) {
-            jsonError('ID, title, date, and excerpt are required');
-        }
+    // ---- MEMORIAS: List distinct years ----
+    case 'memorias-years':
         $db = getDB();
-        $stmt = $db->prepare('UPDATE blog_posts SET title = ?, date = ?, excerpt = ?, image_url = ?, content = ? WHERE id = ?');
-        $stmt->execute([$title, $date, $excerpt, $imageUrl, $content, $id]);
-        jsonSuccess(['message' => 'Post updated']);
+        $stmt = $db->query('SELECT year, COUNT(*) as count FROM memorias GROUP BY year ORDER BY year DESC');
+        $years = $stmt->fetchAll();
+        jsonSuccess($years);
         break;
 
-    // ---- AUTH: Upload image ----
-    case 'upload':
+    // ---- MEMORIAS: Upload PDF ----
+    case 'memoria-upload':
         if ($method !== 'POST') jsonError('POST required');
         requireAuth();
+        $title = trim($_POST['title'] ?? '');
+        $year = trim($_POST['year'] ?? '');
+        $description = trim($_POST['description'] ?? '');
+        if (!$title || !$year) jsonError('Title and year are required');
         if (empty($_FILES['file'])) jsonError('No file uploaded');
         $file = $_FILES['file'];
         if ($file['error'] !== UPLOAD_ERR_OK) jsonError('Upload error: ' . $file['error']);
-        $maxSize = 5 * 1024 * 1024;
-        if ($file['size'] > $maxSize) jsonError('File too large (max 5 MB)');
-        $allowed = [
-            'image/jpeg' => 'jpg',
-            'image/png'  => 'png',
-            'image/gif'  => 'gif',
-            'image/webp' => 'webp',
-        ];
+        $maxSize = 20 * 1024 * 1024;
+        if ($file['size'] > $maxSize) jsonError('File too large (max 20 MB)');
         $finfo = new finfo(FILEINFO_MIME_TYPE);
         $mime = $finfo->file($file['tmp_name']);
-        if (!isset($allowed[$mime])) jsonError('Invalid file type. Allowed: JPG, PNG, GIF, WebP');
-        $ext = $allowed[$mime];
-        $name = uniqid('img_', true) . '.' . $ext;
-        $dir = __DIR__ . '/uploads';
+        if ($mime !== 'application/pdf') jsonError('Only PDF files are allowed');
+        $name = uniqid('mem_', true) . '.pdf';
+        $dir = __DIR__ . '/uploads/memorias';
         if (!is_dir($dir)) mkdir($dir, 0755, true);
         $dest = $dir . '/' . $name;
         if (!move_uploaded_file($file['tmp_name'], $dest)) jsonError('Failed to save file');
-        $url = 'uploads/' . $name;
-        jsonSuccess(['url' => $url]);
+        $filePath = 'uploads/memorias/' . $name;
+        $db = getDB();
+        $stmt = $db->prepare('INSERT INTO memorias (title, year, description, file_path) VALUES (?, ?, ?, ?)');
+        $stmt->execute([$title, $year, $description, $filePath]);
+        jsonSuccess(['id' => $db->lastInsertId(), 'message' => 'Memoria uploaded'], 201);
         break;
 
-    // ---- AUTH: Delete post ----
-    case 'delete':
+    // ---- MEMORIAS: Delete ----
+    case 'memoria-delete':
         if ($method !== 'POST') jsonError('POST required');
         requireAuth();
         $input = json_decode(file_get_contents('php://input'), true);
         $id = $input['id'] ?? '';
-        if (!$id) jsonError('Missing post ID');
+        if (!$id) jsonError('Missing memoria ID');
         $db = getDB();
-        $stmt = $db->prepare('SELECT image_url FROM blog_posts WHERE id = ?');
+        $stmt = $db->prepare('SELECT file_path FROM memorias WHERE id = ?');
         $stmt->execute([$id]);
-        $post = $stmt->fetch();
-        $stmt = $db->prepare('DELETE FROM blog_posts WHERE id = ?');
+        $mem = $stmt->fetch();
+        if (!$mem) jsonError('Memoria not found', 404);
+        $stmt = $db->prepare('DELETE FROM memorias WHERE id = ?');
         $stmt->execute([$id]);
-        if ($post && !empty($post['image_url']) && strpos($post['image_url'], 'uploads/') === 0) {
-            $file = __DIR__ . '/' . $post['image_url'];
+        if (!empty($mem['file_path'])) {
+            $file = __DIR__ . '/' . $mem['file_path'];
             if (is_file($file)) unlink($file);
         }
-        jsonSuccess(['message' => 'Post deleted']);
+        jsonSuccess(['message' => 'Memoria deleted']);
+        break;
+
+    // ---- VOLUNTEER: Submit form ----
+    case 'volunteer':
+        if ($method !== 'POST') jsonError('POST required');
+        $input = json_decode(file_get_contents('php://input'), true);
+
+        $name = trim($input['name'] ?? '');
+        $email = trim($input['email'] ?? '');
+        $phone = trim($input['phone'] ?? '');
+        $area = trim($input['area'] ?? '');
+        $message = trim($input['message'] ?? '');
+        $website = trim($input['website'] ?? '');
+        $pageLoadTime = floatval($input['pageLoadTime'] ?? 0);
+        $submitTime = floatval($input['submitTime'] ?? 0);
+
+        // --- Required fields ---
+        if (!$name || !$email || !$message) {
+            jsonError('Nombre, correo electrónico y mensaje son obligatorios.');
+        }
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            jsonError('Correo electrónico inválido.');
+        }
+
+        // --- Honeypot check ---
+        if ($website !== '') {
+            jsonError('Bot detected', 403);
+        }
+
+        // --- Time gate (must be >= 3 seconds on page) ---
+        $elapsed = ($submitTime - $pageLoadTime) / 1000;
+        if ($elapsed < 3) {
+            jsonError('Por favor espera unos segundos antes de enviar.', 429);
+        }
+
+        // --- Rate limit: max 3 submissions per hour per IP ---
+        $ip = $_SERVER['REMOTE_ADDR'] ?? '0.0.0.0';
+        $db = getDB();
+        $stmt = $db->prepare('SELECT COUNT(*) as cnt FROM volunteer_submissions WHERE ip_address = ? AND created_at > DATE_SUB(NOW(), INTERVAL 1 HOUR)');
+        $stmt->execute([$ip]);
+        $row = $stmt->fetch();
+        if ($row['cnt'] >= 3) {
+            jsonError('Has excedido el límite de envíos. Intenta más tarde.', 429);
+        }
+
+        // --- Insert ---
+        $stmt = $db->prepare('INSERT INTO volunteer_submissions (name, email, phone, area, message, ip_address) VALUES (?, ?, ?, ?, ?, ?)');
+        $stmt->execute([$name, $email, $phone, $area, $message, $ip]);
+
+        // --- Notify admin ---
+        $subject = 'Nueva solicitud de voluntariado - ' . $name;
+        $body = "Nombre: $name\nEmail: $email\nTeléfono: $phone\nÁrea: $area\n\nMensaje:\n$message";
+        $headers = 'From: ' . ADMIN_EMAIL . "\r\n" . 'Reply-To: ' . $email;
+        @mail(ADMIN_EMAIL, $subject, $body, $headers);
+
+        jsonSuccess(['message' => 'Solicitud enviada con éxito.'], 201);
         break;
 
     default:

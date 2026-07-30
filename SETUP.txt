@@ -1,0 +1,242 @@
+========================================
+MOSCTHA DEPLOYMENT - SETUP INSTRUCTIONS
+========================================
+
+This file covers both the Memorias Institucionales (PDF) system
+and the blog system (currently disabled but ready to activate).
+
+Follow these steps one time on your cPanel hosting.
+
+
+========================================
+STEP 1: Create MySQL Database
+========================================
+
+1. Log in to cPanel
+2. Go to "MySQL Databases"
+3. Under "Create New Database", enter a name (e.g. moschta_db)
+   - Full name will be: yourcpaneluser_moschta_db
+4. Click "Create Database"
+
+5. Under "MySQL Users" > "Add New User", create a user:
+   - Username: (e.g. moschta_admin)
+   - Password: (generate a strong password, save it somewhere)
+   - Click "Create User"
+
+6. Under "Add User To Database":
+   - Select the user you just created
+   - Select the database you just created
+   - Click "Add"
+   - Check "ALL PRIVILEGES"
+   - Click "Make Changes"
+
+
+========================================
+STEP 2: Configure .env File
+========================================
+
+The file .env in the project root contains all credentials.
+It is NOT tracked by Git (listed in .gitignore).
+
+On your server, create a file named .env in the same directory
+as api.php with your actual values:
+
+  DB_HOST=localhost
+  DB_NAME=yourcpaneluser_moschta_db
+  DB_USER=yourcpaneluser_moschta_admin
+  DB_PASS=your_strong_password
+  ADMIN_EMAIL=moschta@gmail.com
+  ADMIN_PASSWORD=your_admin_password
+
+For reference, a template can be found in .env.example
+(this file IS safe to commit to Git).
+
+
+========================================
+STEP 3: Create the memorias Table
+========================================
+
+1. Go to "phpMyAdmin" in cPanel
+2. Click on your database name in the left sidebar
+3. Click the "SQL" tab at the top
+4. Paste the following SQL and click "Go":
+
+-----------------------------------------
+
+CREATE TABLE memorias (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  title VARCHAR(255) NOT NULL,
+  year INT NOT NULL,
+  description TEXT,
+  file_path VARCHAR(255) NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-----------------------------------------
+
+
+========================================
+STEP 4: Create the blog_posts Table
+========================================
+
+Only needed if you plan to re-activate the blog later.
+(Optional — skip this if you only need Memorias.)
+
+1. Go to phpMyAdmin > your database > SQL tab
+2. Paste:
+
+-----------------------------------------
+
+CREATE TABLE blog_posts (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  title VARCHAR(255) NOT NULL,
+  date DATE NOT NULL,
+  excerpt TEXT NOT NULL,
+  image_url VARCHAR(500) DEFAULT '',
+  content LONGTEXT NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-----------------------------------------
+
+
+========================================
+STEP 5: Uploads Directory Setup
+========================================
+
+The system stores PDF files in uploads/memorias/ on the server.
+Two things to check on cPanel:
+
+1. DIRECTORY PERMISSIONS
+   - uploads/ and uploads/memorias/ must be writable by PHP.
+   - In cPanel > File Manager, right-click "uploads" > Change Permissions
+   - Set it to 755 (owner: read/write/execute, group/others: read/execute)
+   - If uploads fail, try 777 as a fallback
+
+2. PHP UPLOAD FILE SIZE LIMIT
+   - PDF uploads are allowed up to 20 MB.
+   - In cPanel, go to "MultiPHP INI Editor"
+   - Set "upload_max_filesize" to at least "20M"
+   - Set "post_max_size" to at least "22M"
+   - OR create/edit a .user.ini file in your site root with:
+       upload_max_filesize = 20M
+       post_max_size = 22M
+
+
+========================================
+STEP 6: Done - Using the System
+========================================
+
+PUBLIC:
+  - Memorias list:    https://yoursite.com/memorias.html
+  - Blog (if active): https://yoursite.com/blog.html
+
+ADMIN:
+  - Admin panel:      https://yoursite.com/admin.html
+  - Log in with ADMIN_EMAIL / ADMIN_PASSWORD from .env
+  - Two tabs: "Blog Posts" (disabled by default) and "Memorias"
+  - Under "Memorias": upload PDFs with title, year, and description
+
+Note: The public navigation links point to memorias.html.
+blog.html and post.html still exist but are not linked from
+any page — they can only be accessed by direct URL.
+
+
+========================================
+HOW TO RE-ENABLE THE BLOG
+========================================
+
+If you want to bring the blog back later:
+
+1. In api.php, locate the switch statement and UNCOMMENT these
+   endpoints (remove the "// " from the beginning of each line):
+     - case 'posts'
+     - case 'post'
+     - case 'create'
+     - case 'update'
+     - case 'delete'
+
+   The 'upload' endpoint is already active if you need image uploads.
+
+2. In admin.html, the "Blog Posts" tab will start working again
+   automatically once the API endpoints are available. No code
+   changes needed in admin.html.
+
+3. That's it — the blog will be fully functional again.
+   All database tables and blog_posts data remain intact.
+
+========================================
+EMAIL NOTIFICATIONS (Volunteer Form)
+========================================
+
+The volunteer form (voluntario.html) sends an email notification
+to the admin when someone submits a request. This uses PHP's
+built-in mail() function at api.php:347.
+
+The recipient address is set in the .env file:
+
+  ADMIN_EMAIL=moschta@gmail.com
+
+Change this to whichever email should receive volunteer requests.
+
+
+=== cPanel Setup ===
+
+PHP mail() typically works out of the box on cPanel hosting.
+No special configuration is needed — the server handles email
+delivery through Exim (the built-in mail transfer agent).
+
+Steps:
+
+1. CREATE AN EMAIL ACCOUNT (optional but recommended)
+   In cPanel > Email Accounts, create an account such as:
+     voluntarios@yourdomain.com
+   This gives you a proper mailbox to receive the notifications.
+
+2. UPDATE .env
+   Set ADMIN_EMAIL to the email address that will receive
+   notifications (can be any address — it does not have to be
+   a cPanel account):
+     ADMIN_EMAIL=voluntarios@yourdomain.com
+
+3. IMPROVE DELIVERABILITY (optional)
+   To prevent emails from landing in Spam:
+   - In cPanel > Zone Editor, add an SPF record for your domain:
+       v=spf1 +mx +a +ip4:YOUR_SERVER_IP ~all
+   - In cPanel > Email Deliverability, enable DKIM for your domain
+   - The From header in the email is set to ADMIN_EMAIL.
+     If your server restricts sending from external addresses,
+     change the From address in api.php (line 346) to use an
+     address on your own domain, e.g.:
+       $headers = 'From: Moschta <noreply@yourdomain.com>' . "\r\n" . 'Reply-To: ' . $email;
+
+4. TEST
+   Fill out the volunteer form at voluntario.html and check the
+   destination inbox. If the email doesn't arrive:
+   - Check the Spam/Junk folder
+   - In cPanel > Email Delivery Report, search for recent
+     messages to see if they were sent or deferred
+
+
+=== Troubleshooting ===
+
+- Email not arriving? → Check cPanel > Email Delivery Report
+- Going to Spam? → Add SPF + DKIM records (see step 3 above)
+- PHP mail() blocked by host? → Some shared hosts disable mail().
+  In that case, switch to SMTP authentication using PHPMailer or
+  SwiftMailer (this would require a code change in api.php).
+
+========================================
+SECURITY NOTES
+========================================
+
+- Enable HTTPS in cPanel (free via Let's Encrypt)
+- Keep ADMIN_PASSWORD strong and private
+- The .env file contains all credentials — NEVER commit it to Git
+- .env is already in .gitignore — double-check before pushing
+- The database user only needs access to this one database
+- Only authenticated users can upload/delete memorias or posts
+- PDF and image uploads are validated for type and size
+- The uploads/ directory has .htaccess blocking PHP execution
+
+========================================

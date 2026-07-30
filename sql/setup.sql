@@ -1,0 +1,11 @@
+CREATE TABLE IF NOT EXISTS volunteer_submissions (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    email VARCHAR(255) NOT NULL,
+    phone VARCHAR(50) DEFAULT '',
+    area VARCHAR(100) DEFAULT '',
+    message TEXT NOT NULL,
+    ip_address VARCHAR(45) DEFAULT '',
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    notified TINYINT(1) DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
