@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin - Moschta Blog</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css" rel="stylesheet">
+  <link href="css/style.css" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; background: #f5f5f5; }
+    .login-container { max-width: 400px; margin: 100px auto; }
+    .admin-header { background: var(--color-dark); color: #fff; padding: 1rem 0; margin-bottom: 2rem; }
+    .admin-header h1 { font-size: 1.5rem; margin: 0; font-family: 'Inter', sans-serif; font-weight: 600; }
+    .admin-header .btn-logout { color: rgba(255,255,255,0.7); border: 1px solid rgba(255,255,255,0.3); background: none; }
+    .admin-header .btn-logout:hover { color: #fff; border-color: #fff; }
+    .post-list-item { display: flex; align-items: center; justify-content: space-between; padding: 1rem; border: 1px solid var(--color-border); background: #fff; margin-bottom: 0.5rem; border-radius: 4px; transition: box-shadow 0.3s ease; }
+    .post-list-item:hover { box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+    .post-list-item .post-info { flex: 1; }
+    .post-list-item .post-title { font-weight: 600; margin-bottom: 0.25rem; font-size: 1rem; }
+    .post-list-item .post-date { font-size: 0.8rem; color: var(--color-text-light); }
+    .post-list-item .post-actions { display: flex; gap: 0.5rem; }
+    .editor-container { background: #fff; padding: 2rem; border: 1px solid var(--color-border); border-radius: 4px; }
+    .ql-editor { min-height: 300px; }
+    #loginForm, #adminPanel { display: none; }
+    .alert-fixed { position: fixed; top: 20px; right: 20px; z-index: 9999; min-width: 300px; }
+  </style>
+</head>
+<body>
+
+  <div id="alertBox" class="alert-fixed alert alert-success alert-dismissible fade" role="alert" style="display:none;">
+    <span id="alertMsg"></span>
+    <button type="button" class="btn-close" onclick="this.parentElement.style.display='none'"></button>
+  </div>
+
+  <!-- LOGIN -->
+  <div id="loginForm" class="login-container">
+    <div class="card shadow-sm">
+      <div class="card-body p-4">
+        <h3 class="text-center mb-4">Blog Admin</h3>
+        <form id="formLogin">
+          <div class="mb-3">
+            <label class="form-label">Email</label>
+            <input type="email" id="loginEmail" class="form-control" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Password</label>
+            <input type="password" id="loginPassword" class="form-control" required>
+          </div>
+          <div id="loginError" class="text-danger mb-3" style="display:none;"></div>
+          <button type="submit" class="btn btn-dark w-100">Log In</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- ADMIN PANEL -->
+  <div id="adminPanel">
+    <div class="admin-header">
+      <div class="container d-flex align-items-center justify-content-between">
+        <h1>Moschta Blog Admin</h1>
+        <button class="btn btn-sm btn-logout" id="btnLogout">Log Out</button>
+      </div>
+    </div>
+
+    <div class="container">
+      <!-- Post List View -->
+      <div id="postListView">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <h2 class="mb-0">Posts</h2>
+          <button class="btn btn-dark" id="btnNewPost">+ New Post</button>
+        </div>
+        <div id="postList">
+          <p class="text-muted">Loading posts...</p>
+        </div>
+      </div>
+
+      <!-- Post Editor View -->
+      <div id="postEditorView" style="display:none;">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <h2 class="mb-0" id="editorTitle">New Post</h2>
+          <div>
+            <button class="btn btn-outline-secondary me-2" id="btnCancel">Cancel</button>
+            <button class="btn btn-dark" id="btnSave">Save Post</button>
+          </div>
+        </div>
+        <div class="editor-container">
+          <form id="formPost">
+            <input type="hidden" id="postId">
+            <div class="row mb-3">
+              <div class="col-md-8">
+                <label class="form-label">Title</label>
+                <input type="text" id="postTitle" class="form-control" required>
+              </div>
+              <div class="col-md-4">
+                <label class="form-label">Date</label>
+                <input type="date" id="postDate" class="form-control" required>
+              </div>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Excerpt (short description)</label>
+              <textarea id="postExcerpt" class="form-control" rows="2" required></textarea>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Cover Image</label>
+              <input type="hidden" id="postImage">
+              <div class="d-flex align-items-center gap-3">
+                <input type="file" id="imageFile" class="form-control" accept="image/jpeg,image/png,image/gif,image/webp" style="max-width:320px;">
+                <button type="button" class="btn btn-outline-dark btn-sm" id="btnUploadImage">Upload</button>
+                <span id="uploadStatus" class="text-muted small"></span>
+              </div>
+              <div id="imagePreview" class="mt-2" style="display:none;">
+                <img id="previewImg" src="" alt="Preview" style="max-height:120px; border-radius:4px; border:1px solid var(--color-border);">
+                <button type="button" class="btn btn-sm btn-outline-danger ms-2" id="btnRemoveImage">Remove</button>
+              </div>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Content</label>
+              <div id="quillEditor"></div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"></script>
+  <script>
+    const API = 'api.php';
+    const loginForm = document.getElementById('loginForm');
+    const adminPanel = document.getElementById('adminPanel');
+    const postListView = document.getElementById('postListView');
+    const postEditorView = document.getElementById('postEditorView');
+    const postList = document.getElementById('postList');
+    const alertBox = document.getElementById('alertBox');
+    const alertMsg = document.getElementById('alertMsg');
+
+    let quill;
+
+    document.addEventListener('DOMContentLoaded', () => {
+      quill = new Quill('#quillEditor', {
+        theme: 'snow',
+        placeholder: 'Write your post content here...'
+      });
+      checkSession();
+    });
+
+    function showAlert(msg, type) {
+      alertMsg.textContent = msg;
+      alertBox.className = 'alert-fixed alert alert-' + (type || 'success') + ' alert-dismissible fade show';
+      alertBox.style.display = 'block';
+      setTimeout(() => { alertBox.classList.remove('show'); alertBox.style.display = 'none'; }, 3000);
+    }
+
+    function formatDate(dateStr) {
+      var d = new Date(dateStr + 'T00:00:00');
+      return d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+    }
+
+    function escapeHtml(str) {
+      var div = document.createElement('div');
+      div.textContent = str;
+      return div.innerHTML;
+    }
+
+    function showImagePreview(url) {
+      if (!url) {
+        document.getElementById('imagePreview').style.display = 'none';
+        return;
+      }
+      document.getElementById('previewImg').src = url;
+      document.getElementById('imagePreview').style.display = 'block';
+    }
+
+    document.getElementById('btnUploadImage').addEventListener('click', async function() {
+      var fileInput = document.getElementById('imageFile');
+      var status = document.getElementById('uploadStatus');
+      if (!fileInput.files.length) { status.textContent = 'Select a file first'; return; }
+      var fd = new FormData();
+      fd.append('file', fileInput.files[0]);
+      status.textContent = 'Uploading...';
+      try {
+        var res = await fetch('api.php?action=upload', { method: 'POST', body: fd });
+        var json = await res.json();
+        if (!json.success) throw new Error(json.error);
+        document.getElementById('postImage').value = json.data.url;
+        showImagePreview(json.data.url);
+        fileInput.value = '';
+        status.textContent = 'Uploaded!';
+      } catch (err) {
+        status.textContent = 'Error: ' + err.message;
+      }
+    });
+
+    document.getElementById('btnRemoveImage').addEventListener('click', function() {
+      document.getElementById('postImage').value = '';
+      showImagePreview('');
+    });
+
+    async function apiCall(action, method, body) {
+      var url = API + '?action=' + action;
+      var opts = { method: method || 'GET', headers: {} };
+      if (body) {
+        opts.headers['Content-Type'] = 'application/json';
+        opts.body = JSON.stringify(body);
+      }
+      var res = await fetch(url, opts);
+      var json = await res.json();
+      if (!json.success) throw new Error(json.error || 'Request failed');
+      return json.data;
+    }
+
+    async function checkSession() {
+      try {
+        var data = await apiCall('check');
+        if (data.logged_in) {
+          loginForm.style.display = 'none';
+          adminPanel.style.display = 'block';
+          loadPosts();
+        } else {
+          loginForm.style.display = 'block';
+          adminPanel.style.display = 'none';
+        }
+      } catch (e) {
+        loginForm.style.display = 'block';
+        adminPanel.style.display = 'none';
+      }
+    }
+
+    document.getElementById('formLogin').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      var email = document.getElementById('loginEmail').value;
+      var pass = document.getElementById('loginPassword').value;
+      var errEl = document.getElementById('loginError');
+      try {
+        errEl.style.display = 'none';
+        await apiCall('login', 'POST', { email: email, password: pass });
+        loginForm.style.display = 'none';
+        adminPanel.style.display = 'block';
+        loadPosts();
+      } catch (err) {
+        errEl.textContent = 'Invalid email or password.';
+        errEl.style.display = 'block';
+      }
+    });
+
+    document.getElementById('btnLogout').addEventListener('click', async function() {
+      await apiCall('logout', 'POST');
+      loginForm.style.display = 'block';
+      adminPanel.style.display = 'none';
+    });
+
+    async function loadPosts() {
+      try {
+        var posts = await apiCall('posts');
+        if (posts.length === 0) {
+          postList.innerHTML = '<p class="text-muted">No posts yet. Click "+ New Post" to create one.</p>';
+          return;
+        }
+        postList.innerHTML = posts.map(function(p) {
+          return '<div class="post-list-item">' +
+            '<div class="post-info">' +
+              '<div class="post-title">' + escapeHtml(p.title) + '</div>' +
+              '<div class="post-date">' + formatDate(p.date) + '</div>' +
+            '</div>' +
+            '<div class="post-actions">' +
+              '<button class="btn btn-sm btn-outline-primary" onclick="editPost(' + p.id + ')">Edit</button>' +
+              '<button class="btn btn-sm btn-outline-danger" onclick="removePost(' + p.id + ', \'' + escapeHtml(p.title).replace(/'/g, "\\'") + '\')">Delete</button>' +
+            '</div>' +
+          '</div>';
+        }).join('');
+      } catch (err) {
+        postList.innerHTML = '<p class="text-danger">Error loading posts: ' + escapeHtml(err.message) + '</p>';
+      }
+    }
+
+    document.getElementById('btnNewPost').addEventListener('click', function() {
+      document.getElementById('postId').value = '';
+      document.getElementById('postTitle').value = '';
+      document.getElementById('postDate').value = new Date().toISOString().split('T')[0];
+      document.getElementById('postExcerpt').value = '';
+      document.getElementById('postImage').value = '';
+      document.getElementById('uploadStatus').textContent = '';
+      showImagePreview('');
+      if (quill) quill.setText('');
+      document.getElementById('editorTitle').textContent = 'New Post';
+      postListView.style.display = 'none';
+      postEditorView.style.display = 'block';
+    });
+
+    window.editPost = async function(id) {
+      try {
+        var post = await apiCall('post&id=' + id);
+        document.getElementById('postId').value = post.id;
+        document.getElementById('postTitle').value = post.title || '';
+        document.getElementById('postDate').value = post.date || '';
+        document.getElementById('postExcerpt').value = post.excerpt || '';
+        document.getElementById('postImage').value = post.image_url || '';
+        showImagePreview(post.image_url || '');
+        if (quill && post.content) quill.root.innerHTML = post.content;
+        document.getElementById('editorTitle').textContent = 'Edit Post';
+        postListView.style.display = 'none';
+        postEditorView.style.display = 'block';
+      } catch (err) {
+        showAlert('Error loading post: ' + err.message, 'danger');
+      }
+    };
+
+    document.getElementById('btnCancel').addEventListener('click', function() {
+      postEditorView.style.display = 'none';
+      postListView.style.display = 'block';
+      loadPosts();
+    });
+
+    document.getElementById('btnSave').addEventListener('click', async function() {
+      var id = document.getElementById('postId').value;
+      var data = {
+        id: id || undefined,
+        title: document.getElementById('postTitle').value.trim(),
+        date: document.getElementById('postDate').value,
+        excerpt: document.getElementById('postExcerpt').value.trim(),
+        imageUrl: document.getElementById('postImage').value.trim(),
+        content: quill ? quill.root.innerHTML : ''
+      };
+
+      if (!data.title || !data.date || !data.excerpt) {
+        showAlert('Please fill in title, date, and excerpt.', 'warning');
+        return;
+      }
+
+      try {
+        if (id) {
+          await apiCall('update', 'POST', data);
+          showAlert('Post updated successfully!');
+        } else {
+          delete data.id;
+          await apiCall('create', 'POST', data);
+          showAlert('Post created successfully!');
+        }
+        postEditorView.style.display = 'none';
+        postListView.style.display = 'block';
+        loadPosts();
+      } catch (err) {
+        showAlert('Error saving post: ' + err.message, 'danger');
+      }
+    });
+
+    window.removePost = async function(id, title) {
+      if (!confirm('Delete "' + title + '"? This cannot be undone.')) return;
+      try {
+        await apiCall('delete', 'POST', { id: id });
+        showAlert('Post deleted.');
+        loadPosts();
+      } catch (err) {
+        showAlert('Error deleting post: ' + err.message, 'danger');
+      }
+    };
+  </script>
+</body>
+</html>

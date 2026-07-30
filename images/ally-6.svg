@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="180" height="60" viewBox="0 0 180 60">
+  <rect width="180" height="60" fill="none"/>
+  <path d="M16 38 Q22 18 30 26 Q38 34 44 14" fill="none" stroke="#c9a96e" stroke-width="2" stroke-linecap="round"/>
+  <text x="56" y="34" font-family="Georgia, serif" font-size="16" fill="#1a1a1a" font-weight="600">RISING</text>
+  <text x="56" y="48" font-family="Arial, sans-serif" font-size="9" fill="#666666" letter-spacing="2">TOGETHER</text>
+</svg>

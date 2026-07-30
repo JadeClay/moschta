@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="500" viewBox="0 0 800 500">
+  <rect width="800" height="500" fill="#1a1a1a"/>
+  <rect x="50" y="50" width="700" height="400" fill="none" stroke="#c9a96e" stroke-width="0.5" opacity="0.3"/>
+  <text x="400" y="250" font-family="Georgia, serif" font-size="36" fill="#c9a96e" text-anchor="middle" opacity="0.5">PARTNERSHIP</text>
+  <text x="400" y="290" font-family="Arial, sans-serif" font-size="14" fill="rgba(255,255,255,0.3)" text-anchor="middle">BLOG IMAGE</text>
+</svg>

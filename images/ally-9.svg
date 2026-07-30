@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="180" height="60" viewBox="0 0 180 60">
+  <rect width="180" height="60" fill="none"/>
+  <circle cx="30" cy="30" r="16" fill="none" stroke="#c9a96e" stroke-width="1.5" stroke-dasharray="4 3"/>
+  <text x="30" y="35" font-family="Georgia, serif" font-size="14" fill="#c9a96e" text-anchor="middle" font-weight="700">V</text>
+  <text x="56" y="34" font-family="Georgia, serif" font-size="16" fill="#1a1a1a" font-weight="600">VISION</text>
+  <text x="56" y="48" font-family="Arial, sans-serif" font-size="9" fill="#666666" letter-spacing="2">FORWARD</text>
+</svg>

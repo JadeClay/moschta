@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="180" height="60" viewBox="0 0 180 60">
+  <rect width="180" height="60" fill="none"/>
+  <rect x="16" y="18" width="28" height="24" rx="12" fill="none" stroke="#c9a96e" stroke-width="1.5"/>
+  <line x1="22" y1="30" x2="38" y2="30" stroke="#c9a96e" stroke-width="1.5"/>
+  <circle cx="30" cy="30" r="3" fill="#c9a96e" opacity="0.6"/>
+  <text x="56" y="34" font-family="Georgia, serif" font-size="16" fill="#1a1a1a" font-weight="600">OPEN</text>
+  <text x="56" y="48" font-family="Arial, sans-serif" font-size="9" fill="#666666" letter-spacing="2">DOORS</text>
+</svg>

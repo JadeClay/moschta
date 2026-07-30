@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="180" height="60" viewBox="0 0 180 60">
+  <rect width="180" height="60" fill="none"/>
+  <path d="M30 14 L38 22 L38 38 L30 46 L22 38 L22 22 Z" fill="none" stroke="#c9a96e" stroke-width="1.5"/>
+  <circle cx="30" cy="30" r="4" fill="#c9a96e" opacity="0.5"/>
+  <text x="56" y="34" font-family="Georgia, serif" font-size="16" fill="#1a1a1a" font-weight="600">PEACE</text>
+  <text x="56" y="48" font-family="Arial, sans-serif" font-size="9" fill="#666666" letter-spacing="2">BRIDGE</text>
+</svg>

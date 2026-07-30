@@ -1,0 +1,12 @@
+{
+  "name": "moschta",
+  "version": "1.0.0",
+  "description": "Elegant static website with blog",
+  "scripts": {
+    "build:blog": "node blog/build.js",
+    "build": "node blog/build.js"
+  },
+  "dependencies": {
+    "marked": "^12.0.0"
+  }
+}

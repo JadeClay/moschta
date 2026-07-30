@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="180" height="60" viewBox="0 0 180 60">
+  <rect width="180" height="60" fill="none"/>
+  <circle cx="30" cy="30" r="16" fill="none" stroke="#c9a96e" stroke-width="1.5"/>
+  <path d="M22 30 C22 22 38 22 38 30 C38 38 22 38 22 30" fill="none" stroke="#c9a96e" stroke-width="1"/>
+  <line x1="30" y1="14" x2="30" y2="46" stroke="#c9a96e" stroke-width="0.8"/>
+  <text x="56" y="34" font-family="Georgia, serif" font-size="16" fill="#1a1a1a" font-weight="600">atlas</text>
+  <text x="56" y="48" font-family="Arial, sans-serif" font-size="9" fill="#666666" letter-spacing="2">WORLDWIDE</text>
+</svg>
