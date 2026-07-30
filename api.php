@@ -34,6 +34,7 @@ define('DB_USER', getenv('DB_USER'));
 define('DB_PASS', getenv('DB_PASS'));
 define('ADMIN_EMAIL', getenv('ADMIN_EMAIL'));
 define('ADMIN_PASSWORD', getenv('ADMIN_PASSWORD'));
+define('MAIL_FROM', getenv('MAIL_FROM'));
 
 // ============================================
 // DATABASE CONNECTION
@@ -343,7 +344,7 @@ switch ($action) {
         // --- Notify admin ---
         $subject = 'Nueva solicitud de voluntariado - ' . $name;
         $body = "Nombre: $name\nEmail: $email\nTeléfono: $phone\nÁrea: $area\n\nMensaje:\n$message";
-        $headers = 'From: ' . ADMIN_EMAIL . "\r\n" . 'Reply-To: ' . $email;
+        $headers = 'From: ' . MAIL_FROM . "\r\n" . 'Reply-To: ' . $email;
         @mail(ADMIN_EMAIL, $subject, $body, $headers);
 
         jsonSuccess(['message' => 'Solicitud enviada con éxito.'], 201);

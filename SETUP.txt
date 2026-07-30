@@ -173,11 +173,14 @@ The volunteer form (voluntario.html) sends an email notification
 to the admin when someone submits a request. This uses PHP's
 built-in mail() function at api.php:347.
 
-The recipient address is set in the .env file:
+Two variables control this in .env:
 
-  ADMIN_EMAIL=moschta@gmail.com
+  ADMIN_EMAIL=moschta@gmail.com    # recipient of notifications
+  MAIL_FROM=noreply@yourdomain.com # From header (use a domain on your server)
 
-Change this to whichever email should receive volunteer requests.
+ADMIN_EMAIL is the destination — set it to any address you can check.
+MAIL_FROM is the sender shown in the email — use an address on your
+own domain to avoid SPF/DMARC rejection.
 
 
 === cPanel Setup ===
@@ -204,11 +207,8 @@ Steps:
    - In cPanel > Zone Editor, add an SPF record for your domain:
        v=spf1 +mx +a +ip4:YOUR_SERVER_IP ~all
    - In cPanel > Email Deliverability, enable DKIM for your domain
-   - The From header in the email is set to ADMIN_EMAIL.
-     If your server restricts sending from external addresses,
-     change the From address in api.php (line 346) to use an
-     address on your own domain, e.g.:
-       $headers = 'From: Moschta <noreply@yourdomain.com>' . "\r\n" . 'Reply-To: ' . $email;
+   - Make sure MAIL_FROM in .env uses an email address on your own
+     domain (not Gmail, Yahoo, etc.) — this avoids DMARC rejection
 
 4. TEST
    Fill out the volunteer form at voluntario.html and check the
