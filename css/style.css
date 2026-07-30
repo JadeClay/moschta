@@ -223,6 +223,10 @@ img {
   border-top-color: var(--color-text);
 }
 
+.navbar.scrolled .nav-item.dropdown .dropdown-toggle:hover::after {
+  border-top-color: var(--color-accent);
+}
+
 .navbar.scrolled .nav-item.dropdown .dropdown-menu {
   border-color: var(--color-border);
 }
