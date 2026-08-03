@@ -1,8 +1,8 @@
 :root {
   --color-dark: #1a1a1a;
   --color-white: #ffffff;
-  --color-accent: #2fe471;
-  --color-accent-hover: #197f08;
+  --color-accent: #095926;
+  --color-accent-hover: #0c3704;
   --color-text: #333333;
   --color-text-light: #666666;
   --color-border: #e0e0e0;
@@ -876,6 +876,83 @@ img {
   margin: 0 0.5rem;
   color: var(--color-border);
   font-weight: 300;
+}
+
+/* ===================== */
+/* MEMORIAS SIDEBAR      */
+/* ===================== */
+
+.memorias-sidebar {
+  position: sticky;
+  top: 100px;
+}
+
+.memorias-subsection-heading {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1.25rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid var(--color-accent);
+}
+
+.memorias-subsection-icon {
+  width: 24px;
+  height: 24px;
+  color: var(--color-accent);
+  flex-shrink: 0;
+}
+
+.memorias-subsection-heading h2 {
+  font-family: var(--font-heading);
+  font-size: 1.5rem;
+  margin: 0;
+  color: var(--color-dark);
+}
+
+.memorias-contact-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.memorias-contact-item {
+  background: var(--color-bg-light);
+  border: 1px solid var(--color-border);
+  border-left: 3px solid var(--color-accent);
+  border-radius: 6px;
+  padding: 0.9rem 1rem;
+}
+
+.memorias-contact-area {
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: var(--color-dark);
+  margin-bottom: 0.15rem;
+}
+
+.memorias-contact-coord {
+  font-size: 0.85rem;
+  color: var(--color-text-light);
+  margin-bottom: 0.3rem;
+}
+
+.memorias-contact-email {
+  display: block;
+  font-size: 0.85rem;
+  color: var(--color-accent);
+  font-weight: 500;
+  text-decoration: none;
+  word-break: break-all;
+}
+.memorias-contact-email:hover {
+  text-decoration: underline;
+}
+
+.memorias-contact-phone {
+  font-size: 0.85rem;
+  color: var(--color-text-light);
+  margin-top: 0.15rem;
 }
 
 /* ===================== */
