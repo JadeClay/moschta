@@ -475,7 +475,8 @@ img {
 }
 
 .allies-grid .ally-logo img {
-  max-height: 50px;
+  max-height: 70px;
+  max-width: 100%;
   width: auto;
   filter: grayscale(100%) opacity(0.5);
   transition: all 0.3s ease;
