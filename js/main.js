@@ -32,7 +32,7 @@ document.addEventListener('DOMContentLoaded', function () {
           current = target;
           clearInterval(timer);
         }
-        el.textContent = Math.floor(current) + '+';
+        el.textContent = Math.floor(current).toLocaleString('en-US') + '+';
       }, 16);
     };
 
