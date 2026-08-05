@@ -359,7 +359,7 @@ img {
 }
 
 .hero-carousel .carousel-caption h2 {
-  font-size: 3.5rem;
+  font-size: 2.75rem;
   color: var(--color-white);
   margin-bottom: 1rem;
   text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
@@ -1403,7 +1403,7 @@ img {
   }
 
   .hero-carousel .carousel-caption h2 {
-    font-size: 2.4rem;
+    font-size: 2rem;
   }
 
   .navbar-collapse {
@@ -1443,7 +1443,7 @@ img {
   }
 
   .hero-carousel .carousel-caption h2 {
-    font-size: 1.8rem;
+    font-size: 1.5rem;
   }
 
   .hero-carousel .carousel-caption p {
@@ -1497,7 +1497,7 @@ img {
   }
 
   .hero-carousel .carousel-caption h2 {
-    font-size: 1.4rem;
+    font-size: 1.2rem;
   }
 
   .stat-item {
