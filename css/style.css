@@ -325,9 +325,9 @@ img {
 }
 
 .hero-carousel .carousel-inner {
-  height: 90vh;
+  height: 100vh;
+  height: 100svh;
   min-height: 500px;
-  max-height: 800px;
 }
 
 .hero-carousel .carousel-item {
@@ -417,6 +417,75 @@ img {
 }
 
 /* ===================== */
+/* GALLERY CAROUSEL      */
+/* ===================== */
+
+.gallery-section {
+  background-color: var(--color-bg-light);
+}
+
+.gallery-carousel {
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+}
+
+.gallery-carousel .carousel-inner {
+  height: 450px;
+  min-height: 300px;
+}
+
+.gallery-carousel .carousel-item {
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.gallery-carousel .carousel-control-prev,
+.gallery-carousel .carousel-control-next {
+  width: 50px;
+  height: 50px;
+  top: 50%;
+  bottom: auto;
+  transform: translateY(-50%);
+  background-color: rgba(0, 0, 0, 0.4);
+  border-radius: 50%;
+  margin: 0 15px;
+  opacity: 0.8;
+  transition: opacity 0.3s ease;
+}
+
+.gallery-carousel .carousel-control-prev:hover,
+.gallery-carousel .carousel-control-next:hover {
+  opacity: 1;
+  background-color: rgba(0, 0, 0, 0.6);
+}
+
+.gallery-carousel .carousel-control-prev-icon,
+.gallery-carousel .carousel-control-next-icon {
+  width: 20px;
+  height: 20px;
+}
+
+.gallery-carousel .carousel-indicators {
+  bottom: 1rem;
+}
+
+.gallery-carousel .carousel-indicators button {
+  width: 30px;
+  height: 4px;
+  border-radius: 2px;
+  background-color: var(--color-accent);
+  opacity: 0.5;
+  transition: opacity 0.3s ease;
+}
+
+.gallery-carousel .carousel-indicators button.active {
+  opacity: 1;
+}
+
+/* ===================== */
 /* STATISTICS            */
 /* ===================== */
 
@@ -478,12 +547,15 @@ img {
   max-height: 70px;
   max-width: 100%;
   width: auto;
-  filter: grayscale(100%) opacity(0.5);
+  /* Part of the old animation: logos start gray and get color on hover.
+     Disabled so logos always show in their original color. */
+  /* filter: grayscale(100%) opacity(0.5); */
   transition: all 0.3s ease;
 }
 
 .allies-grid .ally-logo:hover img {
-  filter: grayscale(0%) opacity(1);
+  /* Part of the old animation: restores color on hover (see above). */
+  /* filter: grayscale(0%) opacity(1); */
   transform: scale(1.05);
 }
 
@@ -795,7 +867,8 @@ img {
   color: inherit;
 }
 .clinic-card .clinic-img {
-  height: 200px;
+  height: auto;
+  aspect-ratio: 16 / 9;
   background-size: cover;
   background-position: center;
   position: relative;
@@ -828,6 +901,20 @@ img {
   color: var(--color-text-light);
   margin-bottom: 1.2rem;
   line-height: 1.5;
+}
+.clinic-card .clinic-phone {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+  color: var(--color-text);
+  margin-bottom: 0.6rem;
+}
+.clinic-card .clinic-phone svg {
+  width: 16px;
+  height: 16px;
+  min-width: 16px;
+  stroke: var(--color-accent);
 }
 .clinic-card .clinic-link {
   font-size: 0.8rem;
@@ -1346,6 +1433,14 @@ img {
   font-size: 0.95rem;
 }
 
+.footer-contact-item span a {
+  color: var(--color-text-light);
+}
+
+.footer-contact-item span a:hover {
+  color: var(--color-accent);
+}
+
 .footer-social {
   display: flex;
   gap: 0.8rem;
@@ -1398,12 +1493,17 @@ img {
 
 @media (max-width: 991.98px) {
   .hero-carousel .carousel-inner {
-    height: 70vh;
+    height: 100vh;
+    height: 100svh;
     min-height: 400px;
   }
 
   .hero-carousel .carousel-caption h2 {
     font-size: 2rem;
+  }
+
+  .gallery-carousel .carousel-inner {
+    height: 350px;
   }
 
   .navbar-collapse {
@@ -1435,7 +1535,8 @@ img {
   }
 
   .hero-carousel .carousel-inner {
-    height: 60vh;
+    height: 100vh;
+    height: 100svh;
   }
 
   .hero-carousel .carousel-caption {
@@ -1448,6 +1549,18 @@ img {
 
   .hero-carousel .carousel-caption p {
     font-size: 1rem;
+  }
+
+  .gallery-carousel .carousel-inner {
+    height: 280px;
+    min-height: 220px;
+  }
+
+  .gallery-carousel .carousel-control-prev,
+  .gallery-carousel .carousel-control-next {
+    width: 40px;
+    height: 40px;
+    margin: 0 8px;
   }
 
   .hero-carousel .carousel-control-prev,
@@ -1492,7 +1605,8 @@ img {
 
 @media (max-width: 575.98px) {
   .hero-carousel .carousel-inner {
-    height: 50vh;
+    height: 100vh;
+    height: 100svh;
     min-height: 300px;
   }
 
