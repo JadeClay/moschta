@@ -1493,8 +1493,8 @@ img {
 
 @media (max-width: 991.98px) {
   .hero-carousel .carousel-inner {
-    height: 100vh;
-    height: 100svh;
+    height: 60vh;
+    height: 60svh;
     min-height: 400px;
   }
 
@@ -1535,8 +1535,8 @@ img {
   }
 
   .hero-carousel .carousel-inner {
-    height: 100vh;
-    height: 100svh;
+    height: 60vh;
+    height: 60svh;
   }
 
   .hero-carousel .carousel-caption {
@@ -1605,8 +1605,8 @@ img {
 
 @media (max-width: 575.98px) {
   .hero-carousel .carousel-inner {
-    height: 100vh;
-    height: 100svh;
+    height: 60vh;
+    height: 60svh;
     min-height: 300px;
   }
 
