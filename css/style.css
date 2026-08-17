@@ -1037,6 +1037,11 @@ img {
   text-decoration: underline;
 }
 
+.memorias-contact-tel {
+  font-size: 0.85rem;
+  color: var(--color-text-light);
+  margin-top: 0.15rem;
+}
 .memorias-contact-phone {
   font-size: 0.85rem;
   color: var(--color-text-light);
