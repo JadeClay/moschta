@@ -535,28 +535,77 @@ img {
   border-top: 1px solid var(--color-border);
 }
 
-.allies-grid .ally-logo {
+.allies-marquee {
+  overflow: hidden;
+  mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
+  -webkit-mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
+}
+
+.allies-track {
+  display: flex;
+  width: max-content;
+  animation: allyScroll 30s linear infinite;
+}
+
+.allies-marquee:hover .allies-track {
+  animation-play-state: paused;
+}
+
+.ally-item {
+  flex: 0 0 auto;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 1.5rem;
-  transition: all 0.3s ease;
+  padding: 1.5rem 2rem;
 }
 
-.allies-grid .ally-logo img {
-  max-height: 70px;
-  max-width: 100%;
+.ally-item a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ally-item img {
+  height: 60px;
   width: auto;
-  /* Part of the old animation: logos start gray and get color on hover.
-     Disabled so logos always show in their original color. */
-  /* filter: grayscale(100%) opacity(0.5); */
-  transition: all 0.3s ease;
+  max-width: 150px;
+  object-fit: contain;
+  transition: transform 0.3s ease;
 }
 
-.allies-grid .ally-logo:hover img {
-  /* Part of the old animation: restores color on hover (see above). */
-  /* filter: grayscale(0%) opacity(1); */
-  transform: scale(1.05);
+.ally-item img:hover {
+  transform: scale(1.1);
+}
+
+@keyframes allyScroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+@media (max-width: 768px) {
+  .ally-item {
+    padding: 1.2rem 2rem;
+  }
+
+  .ally-item img {
+    height: 55px;
+    max-width: 130px;
+  }
+}
+
+@media (max-width: 576px) {
+  .ally-item {
+    padding: 1.2rem 2.5rem;
+  }
+
+  .ally-item img {
+    height: 50px;
+    max-width: 120px;
+  }
 }
 
 /* ===================== */
