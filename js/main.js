@@ -62,4 +62,14 @@ document.addEventListener('DOMContentLoaded', function () {
       link.classList.remove('active');
     }
   });
+
+  // Allies marquee: set animation distance to exactly one set width for a seamless loop
+  const alliesTrack = document.querySelector('.allies-track');
+  if (alliesTrack) {
+    const setMarqueeDistance = () => {
+      alliesTrack.style.setProperty('--marquee-distance', alliesTrack.scrollWidth / 2 + 'px');
+    };
+    setMarqueeDistance();
+    window.addEventListener('resize', setMarqueeDistance);
+  }
 });

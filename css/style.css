@@ -545,6 +545,7 @@ img {
   display: flex;
   width: max-content;
   animation: allyScroll 30s linear infinite;
+  animation-timing-function: linear;
 }
 
 .allies-marquee:hover .allies-track {
@@ -578,11 +579,11 @@ img {
 }
 
 @keyframes allyScroll {
-  0% {
+  from {
     transform: translateX(0);
   }
-  100% {
-    transform: translateX(-50%);
+  to {
+    transform: translateX(calc(var(--marquee-distance) * -1));
   }
 }
 
