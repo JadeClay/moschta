@@ -2,8 +2,8 @@
 MOSCTHA DEPLOYMENT - SETUP INSTRUCTIONS
 ========================================
 
-This file covers both the Memorias Institucionales (PDF) system
-and the blog system (currently disabled but ready to activate).
+This file covers the Memorias Institucionales (PDF) system
+and the volunteer signup form.
 
 Follow these steps one time on your cPanel hosting.
 
@@ -76,32 +76,7 @@ CREATE TABLE memorias (
 
 
 ========================================
-STEP 4: Create the blog_posts Table
-========================================
-
-Only needed if you plan to re-activate the blog later.
-(Optional — skip this if you only need Memorias.)
-
-1. Go to phpMyAdmin > your database > SQL tab
-2. Paste:
-
------------------------------------------
-
-CREATE TABLE blog_posts (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  title VARCHAR(255) NOT NULL,
-  date DATE NOT NULL,
-  excerpt TEXT NOT NULL,
-  image_url VARCHAR(500) DEFAULT '',
-  content LONGTEXT NOT NULL,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
------------------------------------------
-
-
-========================================
-STEP 5: Uploads Directory Setup
+STEP 4: Uploads Directory Setup
 ========================================
 
 The system stores PDF files in uploads/memorias/ on the server.
@@ -124,46 +99,18 @@ Two things to check on cPanel:
 
 
 ========================================
-STEP 6: Done - Using the System
+STEP 5: Done - Using the System
 ========================================
 
 PUBLIC:
   - Memorias list:    https://yoursite.com/memorias.html
-  - Blog (if active): https://yoursite.com/blog.html
 
 ADMIN:
   - Admin panel:      https://yoursite.com/admin.html
   - Log in with ADMIN_EMAIL / ADMIN_PASSWORD from .env
-  - Two tabs: "Blog Posts" (disabled by default) and "Memorias"
+  - Two tabs: "Memorias" and "Voluntarios"
   - Under "Memorias": upload PDFs with title, year, and description
-
-Note: The public navigation links point to memorias.html.
-blog.html and post.html still exist but are not linked from
-any page — they can only be accessed by direct URL.
-
-
-========================================
-HOW TO RE-ENABLE THE BLOG
-========================================
-
-If you want to bring the blog back later:
-
-1. In api.php, locate the switch statement and UNCOMMENT these
-   endpoints (remove the "// " from the beginning of each line):
-     - case 'posts'
-     - case 'post'
-     - case 'create'
-     - case 'update'
-     - case 'delete'
-
-   The 'upload' endpoint is already active if you need image uploads.
-
-2. In admin.html, the "Blog Posts" tab will start working again
-   automatically once the API endpoints are available. No code
-   changes needed in admin.html.
-
-3. That's it — the blog will be fully functional again.
-   All database tables and blog_posts data remain intact.
+  - Under "Voluntarios": review volunteer signup submissions and delete them
 
 ========================================
 VOLUNTEER FORM SUBMISSIONS
@@ -204,7 +151,7 @@ SECURITY NOTES
 - The .env file contains all credentials — NEVER commit it to Git
 - .env is already in .gitignore — double-check before pushing
 - The database user only needs access to this one database
-- Only authenticated users can upload/delete memorias or posts
+- Only authenticated users can upload/delete memorias or volunteer submissions
 - PDF and image uploads are validated for type and size
 - The uploads/ directory has .htaccess blocking PHP execution
 

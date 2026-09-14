@@ -82,80 +82,6 @@ $method = $_SERVER['REQUEST_METHOD'];
 
 switch ($action) {
 
-    // [BLOG ENDPOINTS COMMENTED OUT]
-    // case 'posts':
-    //     $db = getDB();
-    //     $stmt = $db->query('SELECT id, title, date, excerpt, image_url, created_at FROM blog_posts ORDER BY date DESC');
-    //     $posts = $stmt->fetchAll();
-    //     jsonSuccess($posts);
-    //     break;
-    //
-    // case 'post':
-    //     if (!isset($_GET['id'])) jsonError('Missing post ID');
-    //     $db = getDB();
-    //     $stmt = $db->prepare('SELECT * FROM blog_posts WHERE id = ?');
-    //     $stmt->execute([$_GET['id']]);
-    //     $post = $stmt->fetch();
-    //     if (!$post) jsonError('Post not found', 404);
-    //     jsonSuccess($post);
-    //     break;
-    //
-    // case 'create':
-    //     if ($method !== 'POST') jsonError('POST required');
-    //     requireAuth();
-    //     $input = json_decode(file_get_contents('php://input'), true);
-    //     $title = trim($input['title'] ?? '');
-    //     $date = $input['date'] ?? '';
-    //     $excerpt = trim($input['excerpt'] ?? '');
-    //     $imageUrl = trim($input['imageUrl'] ?? '');
-    //     $content = $input['content'] ?? '';
-    //     if (!$title || !$date || !$excerpt) {
-    //         jsonError('Title, date, and excerpt are required');
-    //     }
-    //     $db = getDB();
-    //     $stmt = $db->prepare('INSERT INTO blog_posts (title, date, excerpt, image_url, content) VALUES (?, ?, ?, ?, ?)');
-    //     $stmt->execute([$title, $date, $excerpt, $imageUrl, $content]);
-    //     jsonSuccess(['id' => $db->lastInsertId(), 'message' => 'Post created'], 201);
-    //     break;
-    //
-    // case 'update':
-    //     if ($method !== 'POST') jsonError('POST required');
-    //     requireAuth();
-    //     $input = json_decode(file_get_contents('php://input'), true);
-    //     $id = $input['id'] ?? '';
-    //     $title = trim($input['title'] ?? '');
-    //     $date = $input['date'] ?? '';
-    //     $excerpt = trim($input['excerpt'] ?? '');
-    //     $imageUrl = trim($input['imageUrl'] ?? '');
-    //     $content = $input['content'] ?? '';
-    //     if (!$id || !$title || !$date || !$excerpt) {
-    //         jsonError('ID, title, date, and excerpt are required');
-    //     }
-    //     $db = getDB();
-    //     $stmt = $db->prepare('UPDATE blog_posts SET title = ?, date = ?, excerpt = ?, image_url = ?, content = ? WHERE id = ?');
-    //     $stmt->execute([$title, $date, $excerpt, $imageUrl, $content, $id]);
-    //     jsonSuccess(['message' => 'Post updated']);
-    //     break;
-    //
-    // case 'delete':
-    //     if ($method !== 'POST') jsonError('POST required');
-    //     requireAuth();
-    //     $input = json_decode(file_get_contents('php://input'), true);
-    //     $id = $input['id'] ?? '';
-    //     if (!$id) jsonError('Missing post ID');
-    //     $db = getDB();
-    //     $stmt = $db->prepare('SELECT image_url FROM blog_posts WHERE id = ?');
-    //     $stmt->execute([$id]);
-    //     $post = $stmt->fetch();
-    //     $stmt = $db->prepare('DELETE FROM blog_posts WHERE id = ?');
-    //     $stmt->execute([$id]);
-    //     if ($post && !empty($post['image_url']) && strpos($post['image_url'], 'uploads/') === 0) {
-    //         $file = __DIR__ . '/' . $post['image_url'];
-    //         if (is_file($file)) unlink($file);
-    //     }
-    //     jsonSuccess(['message' => 'Post deleted']);
-    //     break;
-
     // ---- AUTH: Login ----
     case 'login':
         if ($method !== 'POST') jsonError('POST required');
@@ -184,44 +110,6 @@ switch ($action) {
             jsonSuccess(['logged_in' => false]);
         }
         break;
-
-    // [BLOG ENDPOINTS CONTINUED]
-    // case 'create':
-    //     if ($method !== 'POST') jsonError('POST required');
-    //     requireAuth();
-    //     $input = json_decode(file_get_contents('php://input'), true);
-    //     $title = trim($input['title'] ?? '');
-    //     $date = $input['date'] ?? '';
-    //     $excerpt = trim($input['excerpt'] ?? '');
-    //     $imageUrl = trim($input['imageUrl'] ?? '');
-    //     $content = $input['content'] ?? '';
-    //     if (!$title || !$date || !$excerpt) {
-    //         jsonError('Title, date, and excerpt are required');
-    //     }
-    //     $db = getDB();
-    //     $stmt = $db->prepare('INSERT INTO blog_posts (title, date, excerpt, image_url, content) VALUES (?, ?, ?, ?, ?)');
-    //     $stmt->execute([$title, $date, $excerpt, $imageUrl, $content]);
-    //     jsonSuccess(['id' => $db->lastInsertId(), 'message' => 'Post created'], 201);
-    //     break;
-    //
-    // case 'update':
-    //     if ($method !== 'POST') jsonError('POST required');
-    //     requireAuth();
-    //     $input = json_decode(file_get_contents('php://input'), true);
-    //     $id = $input['id'] ?? '';
-    //     $title = trim($input['title'] ?? '');
-    //     $date = $input['date'] ?? '';
-    //     $excerpt = trim($input['excerpt'] ?? '');
-    //     $imageUrl = trim($input['imageUrl'] ?? '');
-    //     $content = $input['content'] ?? '';
-    //     if (!$id || !$title || !$date || !$excerpt) {
-    //         jsonError('ID, title, date, and excerpt are required');
-    //     }
-    //     $db = getDB();
-    //     $stmt = $db->prepare('UPDATE blog_posts SET title = ?, date = ?, excerpt = ?, image_url = ?, content = ? WHERE id = ?');
-    //     $stmt->execute([$title, $date, $excerpt, $imageUrl, $content, $id]);
-    //     jsonSuccess(['message' => 'Post updated']);
-    //     break;
 
     // ---- MEMORIAS: List all ----
     case 'memorias':
