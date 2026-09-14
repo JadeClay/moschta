@@ -166,65 +166,34 @@ If you want to bring the blog back later:
    All database tables and blog_posts data remain intact.
 
 ========================================
-EMAIL NOTIFICATIONS (Volunteer Form)
+VOLUNTEER FORM SUBMISSIONS
 ========================================
 
-The volunteer form (voluntario.html) sends an email notification
-to the admin when someone submits a request. This uses PHP's
-built-in mail() function at api.php:347.
+The volunteer form (voluntario.html) saves every submission to the
+volunteer_submissions table in the database. It does NOT send email
+notifications.
 
-Two variables control this in .env:
+To review submissions:
 
-  ADMIN_EMAIL=moschta@gmail.com    # recipient of notifications
-  MAIL_FROM=noreply@yourdomain.com # From header (use a domain on your server)
+1. Open the admin panel:    https://yoursite.com/admin.html
+2. Log in with ADMIN_EMAIL / ADMIN_PASSWORD from .env
+3. Click the "Voluntarios" tab
+4. Each entry shows name, email, phone, area, message, date, and IP
+   with an option to delete it.
 
-ADMIN_EMAIL is the destination — set it to any address you can check.
-MAIL_FROM is the sender shown in the email — use an address on your
-own domain to avoid SPF/DMARC rejection.
+The database table must exist. Use this SQL (also in sql/setup.sql):
 
-
-=== cPanel Setup ===
-
-PHP mail() typically works out of the box on cPanel hosting.
-No special configuration is needed — the server handles email
-delivery through Exim (the built-in mail transfer agent).
-
-Steps:
-
-1. CREATE AN EMAIL ACCOUNT (optional but recommended)
-   In cPanel > Email Accounts, create an account such as:
-     voluntarios@yourdomain.com
-   This gives you a proper mailbox to receive the notifications.
-
-2. UPDATE .env
-   Set ADMIN_EMAIL to the email address that will receive
-   notifications (can be any address — it does not have to be
-   a cPanel account):
-     ADMIN_EMAIL=voluntarios@yourdomain.com
-
-3. IMPROVE DELIVERABILITY (optional)
-   To prevent emails from landing in Spam:
-   - In cPanel > Zone Editor, add an SPF record for your domain:
-       v=spf1 +mx +a +ip4:YOUR_SERVER_IP ~all
-   - In cPanel > Email Deliverability, enable DKIM for your domain
-   - Make sure MAIL_FROM in .env uses an email address on your own
-     domain (not Gmail, Yahoo, etc.) — this avoids DMARC rejection
-
-4. TEST
-   Fill out the volunteer form at voluntario.html and check the
-   destination inbox. If the email doesn't arrive:
-   - Check the Spam/Junk folder
-   - In cPanel > Email Delivery Report, search for recent
-     messages to see if they were sent or deferred
-
-
-=== Troubleshooting ===
-
-- Email not arriving? → Check cPanel > Email Delivery Report
-- Going to Spam? → Add SPF + DKIM records (see step 3 above)
-- PHP mail() blocked by host? → Some shared hosts disable mail().
-  In that case, switch to SMTP authentication using PHPMailer or
-  SwiftMailer (this would require a code change in api.php).
+  CREATE TABLE volunteer_submissions (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    email VARCHAR(255) NOT NULL,
+    phone VARCHAR(50) DEFAULT '',
+    area VARCHAR(100) DEFAULT '',
+    message TEXT NOT NULL,
+    ip_address VARCHAR(45) DEFAULT '',
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    notified TINYINT(1) DEFAULT 0
+  ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 ========================================
 SECURITY NOTES

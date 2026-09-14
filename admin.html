@@ -34,6 +34,16 @@
     .memoria-item-admin .memoria-info { flex: 1; }
     .memoria-item-admin .memoria-title { font-weight: 600; font-size: 0.95rem; }
     .memoria-item-admin .memoria-meta { font-size: 0.8rem; color: var(--color-text-light); }
+    .volunteer-item { padding: 1rem 1.25rem; border: 1px solid var(--color-border); background: #fff; margin-bottom: 0.75rem; border-radius: 4px; }
+    .volunteer-item .volunteer-head { display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-bottom: 0.5rem; }
+    .volunteer-item .volunteer-name { font-weight: 700; font-size: 1rem; }
+    .volunteer-item .volunteer-date { font-size: 0.8rem; color: var(--color-text-light); white-space: nowrap; }
+    .volunteer-item .volunteer-contact { font-size: 0.85rem; color: var(--color-text-light); margin-bottom: 0.5rem; }
+    .volunteer-item .volunteer-contact a { color: var(--color-accent); }
+    .volunteer-item .volunteer-area { display: inline-block; font-size: 0.75rem; background: var(--color-accent); color: #fff; padding: 0.15rem 0.6rem; border-radius: 999px; margin-bottom: 0.5rem; }
+    .volunteer-item .volunteer-message { font-size: 0.9rem; color: #444; background: #f8f8f8; padding: 0.75rem; border-radius: 4px; white-space: pre-wrap; word-break: break-word; margin-bottom: 0.5rem; }
+    .volunteer-item .volunteer-ip { font-size: 0.75rem; color: #aaa; }
+    .volunteer-item .volunteer-actions { display: flex; justify-content: flex-end; }
   </style>
 </head>
 <body>
@@ -78,6 +88,7 @@
       <div class="admin-tabs">
         <button class="admin-tab active" data-tab="blog">Blog Posts</button>
         <button class="admin-tab" data-tab="memorias">Memorias</button>
+        <button class="admin-tab" data-tab="voluntarios">Voluntarios</button>
       </div>
 
       <!-- ============ BLOG TAB ============ -->
@@ -183,6 +194,16 @@
           <p class="text-muted">Loading memorias...</p>
         </div>
       </div>
+
+      <!-- ============ VOLUNTARIOS TAB ============ -->
+      <div id="tabVoluntarios" style="display:none;">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <h2 class="mb-0">Solicitudes de Voluntariado</h2>
+        </div>
+        <div id="volunteerList">
+          <p class="text-muted">Loading...</p>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -197,6 +218,7 @@
     const postList = document.getElementById('postList');
     const tabBlog = document.getElementById('tabBlog');
     const tabMemorias = document.getElementById('tabMemorias');
+    const tabVoluntarios = document.getElementById('tabVoluntarios');
     const alertBox = document.getElementById('alertBox');
     const alertMsg = document.getElementById('alertMsg');
 
@@ -283,8 +305,10 @@
         var target = this.getAttribute('data-tab');
         tabBlog.style.display = target === 'blog' ? 'block' : 'none';
         tabMemorias.style.display = target === 'memorias' ? 'block' : 'none';
+        tabVoluntarios.style.display = target === 'voluntarios' ? 'block' : 'none';
         if (target === 'blog') loadPosts();
         if (target === 'memorias') loadMemorias();
+        if (target === 'voluntarios') loadVolunteers();
       });
     });
 
@@ -549,6 +573,65 @@
         loadMemorias();
       } catch (err) {
         showAlert('Error deleting memoria: ' + err.message, 'danger');
+      }
+    };
+
+    // ==================== VOLUNTARIOS ====================
+    var AREA_LABELS = {
+      'salud': 'Salud',
+      'desarrollo': 'Desarrollo Comunitario',
+      'humanitario': 'Trabajo Humanitario',
+      'educacion': 'Educación',
+      'legal': 'Legal / Incidencia',
+      'sin preferencia': 'Sin preferencia'
+    };
+
+    function formatDateTime(dateStr) {
+      if (!dateStr) return '';
+      var d = new Date(dateStr.replace(' ', 'T'));
+      return d.toLocaleString('es-DO', { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+    }
+
+    async function loadVolunteers() {
+      var list = document.getElementById('volunteerList');
+      list.innerHTML = '<p class="text-muted">Loading...</p>';
+      try {
+        var subs = await apiCall('volunteers');
+        if (subs.length === 0) {
+          list.innerHTML = '<p class="text-muted">No hay solicitudes de voluntariado todavía.</p>';
+          return;
+        }
+        list.innerHTML = subs.map(function(s) {
+          var areaLabel = AREA_LABELS[s.area] || s.area || '—';
+          var area = s.area ? '<span class="volunteer-area">' + escapeHtml(areaLabel) + '</span>' : '';
+          var nameMail = '<a href="mailto:' + escapeHtml(s.email) + '">' + escapeHtml(s.email) + '</a>';
+          var phone = s.phone ? ' · Tel: ' + escapeHtml(s.phone) : '';
+          return '<div class="volunteer-item">' +
+            '<div class="volunteer-head">' +
+              '<div class="volunteer-name">' + escapeHtml(s.name) + '</div>' +
+              '<div class="volunteer-date">' + escapeHtml(formatDateTime(s.created_at)) + '</div>' +
+            '</div>' +
+            '<div class="volunteer-contact">' + nameMail + phone + '</div>' +
+            area +
+            '<div class="volunteer-message">' + escapeHtml(s.message) + '</div>' +
+            '<div class="volunteer-actions">' +
+              '<button class="btn btn-sm btn-outline-danger" onclick="removeVolunteer(' + s.id + ')">Eliminar</button>' +
+            '</div>' +
+          '</div>';
+        }).join('');
+      } catch (err) {
+        list.innerHTML = '<p class="text-danger">Error al cargar solicitudes: ' + escapeHtml(err.message) + '</p>';
+      }
+    }
+
+    window.removeVolunteer = async function(id) {
+      if (!confirm('¿Eliminar esta solicitud? Esta acción no se puede deshacer.')) return;
+      try {
+        await apiCall('volunteer-delete', 'POST', { id: id });
+        showAlert('Solicitud eliminada.');
+        loadVolunteers();
+      } catch (err) {
+        showAlert('Error al eliminar: ' + err.message, 'danger');
       }
     };
   </script>
