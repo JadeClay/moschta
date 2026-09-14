@@ -1595,7 +1595,7 @@ img {
   color: var(--color-text-light);
 }
 
-.memoria-download-btn {
+.memoria-view-btn {
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
@@ -1610,12 +1610,12 @@ img {
   transition: background 0.2s;
 }
 
-.memoria-download-btn svg {
+.memoria-view-btn svg {
   width: 16px;
   height: 16px;
 }
 
-.memoria-download-btn:hover {
+.memoria-view-btn:hover {
   background: var(--color-accent);
   color: #fff;
 }
